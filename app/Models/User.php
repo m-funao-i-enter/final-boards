@@ -18,7 +18,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'user_name',
+        'user_id',
         'email',
         'password',
     ];
@@ -42,4 +43,12 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    
+    /**
+     * このユーザーが所有する投稿。（ Userモデルとの関係を定義）
+     */
+    public function boards()
+    {
+        return $this->hasMany(Board::class, 'user_number');
+    }
 }
