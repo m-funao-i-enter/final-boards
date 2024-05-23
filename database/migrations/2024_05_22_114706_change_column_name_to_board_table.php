@@ -12,7 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('board', function (Blueprint $table) {
-            $table->dropColumn('content, 255');
             $table->string('message', 255);
             $table->tinyInteger('delete_flag')->default(0);
         });
@@ -24,9 +23,12 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('board', function (Blueprint $table) {
-            $table->string('content, 255');
             $table->dropColumn('message', 255);
             $table->dropColumn('delete_flag');
+            
+            // 外部キー制約
+            $table->foreign('user_number')->references('id')->on('users');
+            
         });
     }
 };

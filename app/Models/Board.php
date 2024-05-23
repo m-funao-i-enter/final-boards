@@ -20,6 +20,7 @@ class Board extends Model
     * @var string
     */
     protected $table = 'board'; // ここで任意の名前を設定
+    protected $primaryKey = 'message_id';
     
     public function user()
     {

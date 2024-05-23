@@ -12,9 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('board', function (Blueprint $table) {
-            $table->unsignedBigInteger('message_id');
+            $table->increments('message_id');
             $table->unsignedBigInteger('user_number');
-            $table->string('content, 255');
             $table->timestamps();
             // $table->tinyInteger('delete_flag');
             
