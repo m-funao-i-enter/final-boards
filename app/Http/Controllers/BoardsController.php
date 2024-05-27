@@ -37,17 +37,27 @@ class BoardsController extends Controller
         // バリデーション
         $request->validate([
             'message' => 'required|max:128',
-            'user_name' => 'required|max:32',
+        ],
+        [
+            'message.required' => 'メッセージを入力してください',
+            'message.max' => '※140⽂字以内で⼊⼒してください。',
         ]);
         
-        // 認証済みユーザー（閲覧者）の投稿として作成（リクエストされた値をもとに作成）
+        // 投稿成功時
+        try {
+            // 認証済みユーザー（閲覧者）の投稿として作成（リクエストされた値をもとに作成）
         $request->user()->boards()->create([
-            'user_name' => $request->user_name,
             'message' => $request->message,
         ]);
+            session()->flash('flash_message_success', '投稿しました！');
+        }
+        catch(\Exception $e) {
+            $e->getMessage();
+            session()->flash('flash_message_error', '投稿失敗しました');
+        }
         
         // 前のURLへリダイレクトさせる
-        return back();
+        return redirect('/');
     }
     
     public function destroy(string $message_id)

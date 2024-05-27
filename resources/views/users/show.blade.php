@@ -7,10 +7,11 @@
             @include('users.card')
         </aside>
         <div class="sm:col-span-2 mt-4">
+
             {{-- 投稿フォーム --}}
             @include('boards.form')
             {{-- 投稿一覧 --}}
-            @include('boards.microposts')
+            @include('boards.boards')
         </div>
     </div>
 @endsection

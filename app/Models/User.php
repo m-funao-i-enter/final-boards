@@ -51,5 +51,77 @@ class User extends Authenticatable
     {
         return $this->hasMany(Board::class, 'user_number');
     }
+        /**
+     * このユーザーに関係するモデルの件数をロードする。
+     */
+    public function loadRelationshipCounts()
+    {
+        $this->loadCount(['boards', 'favorites']);
+    }
+        /**
+     * このユーザーがfavoriteした投稿。
+     */
+    public function favorites()
+    {
+        return $this->belongsToMany(Board::class, 'favorites', 'user_number', 'message_id')->withTimestamps();
+    }
+
+    /**
+     * $favoriteIdで指定された投稿をお気に入りする。
+     *
+     * @param  int  $favoriteId
+     * @return bool
+     */
+    public function favorite(int $favoriteId)
+    {
+        $exist = $this->is_favorite($favoriteId);
+        if($exist){
+            return false;
+        }
+        else{
+            $this->favorites()->attach($favoriteId);
+            return true;
+        }
+    }
     
+    /**
+     * $toFavoritesで指定された投稿をお気に入り解除する。
+     * 
+     * @param  int $FavoriteId
+     * @return bool
+     */
+    public function unfavorite(int $favoriteId)
+    {
+        $exist = $this->is_favorite($favoriteId);
+        if($exist){
+            $this->favorites()->detach($favoriteId);
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    
+    /**
+     * 指定された$favoriteIdの投稿がお気に入り登録済みか調べる。
+     * 
+     * @param  int $favoriteId
+     * @return bool
+     */
+    public function is_favorite(int $favoriteId)
+    {
+        return $this->favorites()->where('favorites.message_id', $favoriteId)->exists();
+    }
+    
+    /**
+     * このユーザーのお気に入りした投稿に絞り込む。
+     */
+    public function feed_favorites()
+    {
+        // このユーザーお気に入りした投稿を取得して配列にする
+        $FavoriteId = $this->pluck('favorites')->toArray();
+        // それらのユーザーが所有する投稿に絞り込む
+        return Board::whereIn($favoriteId);
+    }
 }
+
