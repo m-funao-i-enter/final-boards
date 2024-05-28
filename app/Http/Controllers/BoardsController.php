@@ -21,9 +21,18 @@ class BoardsController extends Controller
                     ->select('board.*', 'users.user_name')
                     ->orderBy('board.created_at', 'desc')
                     ->paginate(5);
+                    
+            // お気に入り情報を取得
+            $favorites = $user->favorites;
+            
+            // お気に入りの数をカウント
+            $counter= $user->favorites()->count();
+            
             $data = [
                 'user' => $user,
                 'boards' => $boards,
+                'favorites' => $favorites,
+                'counter' => $counter,
             ];
         }
         
@@ -88,11 +97,15 @@ class BoardsController extends Controller
         
         // ユーザーの投稿一覧を作成日時の降順で取得
         $boards = $user->boards()->orderBy('created_at', 'desc')->paginate(10);
-
+        
+        // お気に入りの数をカウント
+        $favorites= $user->favorites()->count();
+        
         // ユーザー詳細ビューでそれを表示
         return view('users.show', [
             'user' => $user,
-            'boards' => $boards
+            'boards' => $boards,
+            'favorite' => $favorites,
         ]);
     }
 }

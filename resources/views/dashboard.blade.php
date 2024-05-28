@@ -4,8 +4,8 @@
     @if (Auth::check())
         <div class="sm:grid sm:grid-cols-3 sm:gap-10">
             <aside class="mt-4">
-                {{-- ユーザー情報 --}}
-                @include('users.card')
+                {{-- お気に入り情報 --}}
+                @include('users.favorite')
             </aside>
             <div class="sm:col-span-2">
                 {{-- 投稿フォーム --}}
